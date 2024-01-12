@@ -17,7 +17,7 @@ if missing_lib then return 0 end
 
 
 GUI.name = "MIDI liveliness"
-GUI.x, GUI.y, GUI.w, GUI.h = 0, 0, 640, 480
+GUI.x, GUI.y, GUI.w, GUI.h = 200, 200, 400, 400
 GUI.anchor, GUI.corner = "mouse", "C"
 
 
