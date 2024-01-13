@@ -6,14 +6,11 @@ end
 loadfile(lib_path .. "Core.lua")()
 
 
-
-
 GUI.req("Classes/Class - Options.lua")()
 GUI.req("Classes/Class - Button.lua")()
 GUI.req("Classes/Class - Textbox.lua")()
 -- If any of the requested libraries weren't found, abort the script.
 if missing_lib then return 0 end
-
 
 
 GUI.name = "MIDI liveliness"
@@ -27,20 +24,17 @@ local function has_value (tab, val)
           return true
       end
   end
-
   return false
 end
 
   
 function get_random_vel(min_vel, max_vel)
-  -- math.randomseed(os.time())
   random_vel = math.random(min_vel, max_vel)
   return random_vel
 end
 
 function get_altered_pos(startppqposOut, endppqPosOut)
-  -- math.randomseed(os.time())
-  -- representing altering position of 40% of notes
+  -- representing altering position of 80% of notes
   altering_these_values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
   random_num = math.random(1, 10)
   if has_value(altering_these_values, random_num) then
@@ -65,12 +59,18 @@ function make_midi_lively()
   retval, notes, ccs, sysex = reaper.MIDI_CountEvts(take)
   min_vel = GUI.Val("min_velocity_tb")
   max_vel = GUI.Val("max_velocity_tb")
+  -- Returns number of selection starting from 1 (not the text value)
   alter_pos = GUI.Val("alter_pos_radio")
   for n = 0, notes-1 do
     retval, sel, muted, startppqposOut, endppqPosOut, chan, pitch, vel = reaper.MIDI_GetNote(take, n)
     if sel == true then
         random_vel = get_random_vel(min_vel, max_vel)
-        startppqposOut_altered, endppqPosOut_altered = get_altered_pos(startppqposOut, endppqPosOut)
+        if alter_pos == 1 then
+          startppqposOut_altered, endppqPosOut_altered = get_altered_pos(startppqposOut, endppqPosOut)
+        else
+          startppqposOut_altered = startppqposOut
+          endppqPosOut_altered = endppqPosOut
+        end
         reaper.MIDI_SetNote(take, n, sel, muted, startppqposOut_altered, endppqPosOut_altered, chan, pitch, random_vel)
     end
   end
