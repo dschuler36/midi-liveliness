@@ -35,7 +35,7 @@ end
 
 function get_altered_pos(startppqposOut, endppqPosOut)
   -- representing altering position of 80% of notes
-  altering_these_values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+  altering_these_values = {1, 2, 3, 4, 5, 6, 7, 8}
   random_num = math.random(1, 10)
   if has_value(altering_these_values, random_num) then
     alter_amt = math.random(-10, 10)
